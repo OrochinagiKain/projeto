@@ -1,7 +1,7 @@
 const express = require("express");
-const fs = require("fs");
 const fetch = require("node-fetch");
 const Handlebars = require("handlebars");
+const htmlPdf = require("html-pdf");
 
 const app = express();
 // GET
@@ -29,9 +29,14 @@ app.post("/certificado", async (req, res) => {
     schoolDirector: text.schoolDirector,
     signingDate: text.signingDate,
   });
-  console.log(t);
-  res.header("content-type", "text/html");
-  res.send(t);
+  htmlPdf.create(t).toStream((_, stream) => {
+    res.header("content-type", "application/pdf");
+    res.header(
+      "content-disposition",
+      `attachment; filename="Certificado_${text.studentName}.pdf"`
+    );
+    stream.pipe(res);
+  });
 });
 
 app.listen(process.env.PORT || 3000);
