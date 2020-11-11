@@ -21,11 +21,11 @@ app.post("/certificado", async (req, res) => {
   let text = req.body;
   const certificado = Handlebars.compile(certificadoText);
   const t = certificado({
-    studentName: text.studentName,
+    student: text.student,
     gender: text.gender,
-    courseName: text.courseName,
-    schoolName: text.schoolName,
-    courseConclusion: text.courseConclusion,
+    course: text.course,
+    school: text.school,
+    courseConclusionDate: text.courseConclusionDate,
     schoolDirector: text.schoolDirector,
     signingDate: text.signingDate,
   });
@@ -33,7 +33,7 @@ app.post("/certificado", async (req, res) => {
     res.header("content-type", "application/pdf");
     res.header(
       "content-disposition",
-      `attachment; filename="Certificado_${text.studentName}.pdf"`
+      `attachment; filename="Certificado_${text.student}.pdf"`
     );
     stream.pipe(res);
   });
